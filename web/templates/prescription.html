@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medicine Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        #addRowBtn {
+            display: block;
+            margin: 20px auto;
+        }
+
+        .delete-button {
+            background-color: #ff3333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .patient-info-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="patient-info-box">
+        <h2>Patient Information</h2>
+        <form id="patientInfoForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name"><br><br>
+            
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone"><br><br>
+            
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email"><br><br>
+            
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address"><br><br>
+            
+            <label for="age">Age:</label>
+            <input type="text" id="age" name="age"><br><br>
+            
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date"><br><br>
+            
+            <label for="gender">Gender:</label>
+            <input type="radio" id="male" name="gender" value="male">
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Female</label><br><br>
+        </form>
+    </div>
+
+    <h1>Medicine Tracker</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Medicine Composition</th>
+                <th> (Before Breakfast)</th>
+                <th> (After Breakfast)</th>
+                <th> (Before Lunch)</th>
+                <th> (After Lunch)</th>
+                <th> (Before Dinner)</th>
+                <th> (After Dinner)</th>
+                <th>Instructions</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="medicineTableBody">
+            <!-- Existing rows go here if any -->
+        </tbody>
+    </table>
+
+
+
+    <button id="addRowBtn">Add Row</button>
+    <button id="printPdfBtn">Print PDF</button>
+
+    <script>
+        // Function to initialize Selectize for a specific row
+                // Function to initialize Selectize for a specific row
+        function initializeSelectize(row) {
+            const compositionSelect = row.querySelector(".medicine-composition");
+            $(compositionSelect).selectize({
+                create: false,
+            });
+        }
+
+        // Function to add a new row to the table
+        function addRow() {
+            const tableBody = document.getElementById("medicineTableBody");
+            const newRow = document.createElement("tr");
+
+            // Medicine Composition (Selectize Field)
+            const compositionCell = document.createElement("td");
+            const compositionSelect = document.createElement("select");
+            compositionSelect.setAttribute("class", "medicine-composition");
+
+            // Add an empty option by default
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "";
+            compositionSelect.appendChild(defaultOption);
+
+            // Add options to the select field
+            const options = ["Option 1", "Option 2", "Option 3"]; // Replace with your actual options
+            options.forEach(option => {
+                const optionElement = document.createElement("option");
+                optionElement.value = option;
+                optionElement.textContent = option;
+                compositionSelect.appendChild(optionElement);
+            });
+
+            compositionCell.appendChild(compositionSelect);
+            newRow.appendChild(compositionCell);
+
+            // Tablets (Before and After Food) - Breakfast, Lunch, Dinner
+            for (let i = 1; i <= 6; i++) {
+                const tabletsCell = document.createElement("td");
+                tabletsCell.classList.add("tablet-cell");
+                const defaultValue = "0";
+                tabletsCell.innerHTML = `<input maxlength="1" size="1" type="number" step="0.5" placeholder="Tablets" value="${defaultValue}" min="0" max="9">`;
+                
+                newRow.appendChild(tabletsCell);
+            }
+
+            // Instructions (Input Field)
+            const instructionsCell = document.createElement("td");
+            const instructionsInput = document.createElement("input");
+            instructionsInput.setAttribute("type", "text");
+            instructionsInput.setAttribute("placeholder", "Instructions");
+            instructionsCell.appendChild(instructionsInput);
+
+            newRow.appendChild(instructionsCell);
+
+            // Delete Button
+            const deleteCell = document.createElement("td");
+            const deleteButton = document.createElement("button");
+            deleteButton.innerText = "Delete";
+            deleteButton.classList.add("delete-button");
+            deleteButton.addEventListener("click", () => {
+                tableBody.removeChild(newRow);
+            });
+
+            deleteCell.appendChild(deleteButton);
+            newRow.appendChild(deleteCell);
+
+            tableBody.appendChild(newRow);
+
+            // Initialize Selectize for the new row
+            initializeSelectize(newRow);
+        }
+
+       
+        function printPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Patient Information
+    doc.setFontSize(16);
+    doc.text("Patient Information", 20, 20);
+    doc.setFontSize(12);
+
+    // Extract and add patient information from the form
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const email = document.getElementById("email").value;
+    const address = document.getElementById("address").value;
+    const age = document.getElementById("age").value;
+    const date = document.getElementById("date").value;
+    const gender = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : '';
+
+    doc.text(`Name: ${name}`, 20, 30);
+    doc.text(`Phone: ${phone}`, 20, 40);
+    doc.text(`Email: ${email}`, 20, 50);
+    doc.text(`Address: ${address}`, 20, 60);
+    doc.text(`Age: ${age}`, 20, 70);
+    doc.text(`Date: ${date}`, 20, 80);
+    doc.text(`Gender: ${gender}`, 20, 90);
+
+    // Medicine Tracking Table
+    doc.addPage();
+    doc.setFontSize(16);
+    doc.text("Medicine Tracking", 20, 20);
+
+    // Table Headings
+    const tableHeadings = [
+        "Medicine Composition",
+        "Before Breakfast",
+        "After Breakfast",
+        "Before Lunch",
+        "After Lunch",
+        "Before Dinner",
+        "After Dinner",
+        "Instructions"
+    ];
+
+    let xOffset = 20;
+    tableHeadings.forEach((heading, index) => {
+        doc.text(heading, xOffset, 30);
+        xOffset += 40; // Adjust this value for column spacing
+    });
+
+    // Extract and print data from all rows
+    const tableRows = document.querySelectorAll("#medicineTableBody tr");
+    let yOffset = 40;
+
+    tableRows.forEach(row => {
+        const compositionSelect = row.querySelector(".medicine-composition select");
+        const tabletsInputs = Array.from(row.querySelectorAll(".tablet-cell input"));
+        const instructionsInput = row.querySelector(".instructions-cell input");
+
+        const composition = compositionSelect ? compositionSelect.value : '';
+        const tablets = tabletsInputs.map(input => input.value);
+        const instructions = instructionsInput ? instructionsInput.value : '';
+
+        const rowData = [
+            composition,
+            ...tablets,
+            instructions
+        ];
+
+        let xOffset = 20;
+        rowData.forEach(data => {
+            doc.text(data, xOffset, yOffset);
+            xOffset += 40; // Adjust this value for column spacing
+        });
+
+        yOffset += 10; // Adjust this value for row spacing
+    });
+
+    // Save or print the PDF
+    doc.save("Medicine_Tracker.pdf"); // Save the PDF with a specific filename
+}
+
+
+        const addRowBtn = document.getElementById("addRowBtn");
+        addRowBtn.addEventListener("click", addRow);
+
+        const printPdfBtn = document.getElementById("printPdfBtn");
+        printPdfBtn.addEventListener("click", printPDF);
+
+        // Function to fetch medicine options and populate the select field
+        function fetchMedicineOptions() {
+            const compositionSelect = document.querySelector(".medicine-composition");
+            compositionSelect.innerHTML = ''; // Clear existing options
+
+            fetch('/get_medicine_options') // Update the URL to match your Flask route
+                .then(response => response.json())
+                .then(data => {
+                    // Add an empty option by default
+                    const defaultOption = document.createElement("option");
+                    defaultOption.value = "";
+                    defaultOption.textContent = "";
+                    compositionSelect.appendChild(defaultOption);
+
+                    // Populate select field with options from the database
+                    data.forEach(option => {
+                        const optionElement = document.createElement("option");
+                        optionElement.value = option;
+                        optionElement.textContent = option;
+                        compositionSelect.appendChild(optionElement);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Call the function to fetch and populate options when the page loads
+        fetchMedicineOptions();
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medicine Search</title>
+    <style>
+        /* Add CSS styles for the suggestions dropdown */
+        #suggestions {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        #suggestions li {
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+
+    <h1>Medicine Search</h1>
+    <form action="/analysis-search" method="post" id="searchForm">
+        <label for="composition">Enter Composition:</label>
+        <input id="composition" type="text" name="composition" required>
+        <button type="submit">Search</button>
+    </form>
+    <ul id="suggestions"></ul>
+    <div id="search-composition"></div>
+    <div id="search-results"></div>
+    <script src="{{ url_for('static', filename='analysis_script.js') }}"></script>
+
+    <iframe src="/dashboard/" width="100%" height="1000" frameBorder="0">
+    </iframe>
+</body>
+</html>

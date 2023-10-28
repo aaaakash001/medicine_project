@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medicine Search</title>
+    <style>
+        /* Add CSS styles for the suggestions dropdown */
+        #suggestions {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        #suggestions li {
+            padding: 5px;
+            cursor: pointer;
+        }
+        #space{
+            height = 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Medicine Search</h1>
+    <form action="/search" method="post" id="searchForm">
+        <label for="composition">Enter Composition:</label>
+        <input id="composition" type="text" name="composition" required>
+        <button type="submit">Search</button>
+    </form>
+    <ul id="suggestions"></ul>
+    <div id="space">
+    </div>
+    <div id="search-results"></div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
