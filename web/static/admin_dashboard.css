@@ -1,0 +1,64 @@
+/* Add advanced styles to improve the UI */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+h2 {
+    color: #444;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 400px;
+}
+
+/* Adjust input styles to prevent overflow from the right */
+input[type="text"] {
+    width: 100%;
+    max-width: 300px; /* Limit the width to the container width */
+    padding: 12px;
+    margin: 5px 0; /* Reduced margin for a more compact form */
+    border: 2px solid #007BFF;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    color: #333;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+    border-color: #0056b3;
+}
+
+input[type="checkbox"] {
+    margin-left: 5px;
+}
+
+input[type="submit"] {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#result-message {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #007BFF;
+}

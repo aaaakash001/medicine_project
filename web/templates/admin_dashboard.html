@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin_dashboard.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="static/admin_dashboard_script.js"></script>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    
+    <h2>Add New Medicine</h2>
+    <form id="add-medicine-form">
+        <input type="text" id="name" name="name" placeholder="Medicine Name" required><br><br>
+        <input type="text" id="composition" name="composition" placeholder="Composition" required><br><br>
+        <input type="text" id="brand" name="brand" placeholder="Brand" required><br><br>
+        <input type="text" id="type" name="type" placeholder="Type" required><br><br>
+        <input type="text" id="price" name="price" placeholder="Price" required><br><br>
+        <input type="checkbox" id="prescription" name="prescription"> Prescription Required<br><br>
+        <input type="submit" value="Add Medicine">
+    </form>
+    
+
+    <div id="result-message"></div>
+
+
+</body>
+</html>
