@@ -1,67 +1,58 @@
-###Medicine Project Readme
-Overview
-Welcome to the Medicine Project! This repository contains files and directories related to the development and management of a medicine-related application or system. The project includes various components, such as an admin dashboard, user interface changes, and data files.
+# DocAssist README
 
-Directory Structure
-Here's an overview of the directory structure and the most recent commit information for each element:
+## Overview
 
-parent directory
+Welcome to the DocAssist repository.
 
-Last commit message: Initial project setup
-Last commit date: [Date]
-static (Directory)
+## Directory Structure
 
-Last commit message: Updated static files
-Last commit date: [Date]
-admin_dashboard (Directory)
+Here's a quick overview of the project's directory structure and recent commits:
 
-Last commit message: Implemented admin dashboard features
-Last commit date: 3 days ago
-style (Directory)
+- **web**
 
-Last commit message: Styling improvements
-Last commit date: 3 days ago
-templates (Directory)
+  - **static (Directory): contains javascript and css file** 
+    - *admin_dashboard.css*
+    - *admin_dashboard_script.js*
+    - *admin_script.js*
+    - *analysis_script.js*
+    - *bill_script.js*
+    - *prescription_script.js*
+    - *brand_script.js*
+    - *script.js*
 
-Last commit message: Added templates for the admin dashboard
-Last commit date: 3 days ago
-.DS_Store (File)
+  - **templates (Directory) : contains html files**
+    - *index.html*
+    - *admin_dashboard.html*
+    - *admin.html*
+    - *analysis.html*
+    - *bill.html*
+    - *brands.html*
+    - *prescription.html*
+    - *results.html*
 
-Last commit message: Ignore .DS_Store
-Last commit date: 3 days ago
-.medicine_all.csv.icloud (File)
+  - **composition.py**
+    - *contains flask and dash code*
+ 
 
-Last commit message: Updated medicine data file
-Last commit date: 22 minutes ago
-composition.py
+## Project Description
 
-Last commit message: Added composition calculation logic
-Last commit date: [Date]
-Project Description
-The primary components of the Medicine Project are as follows:
+The Medicine Project is organized into the following components:
 
-Admin Dashboard: The admin_dashboard directory contains the code and resources for an administrative dashboard where administrators can manage medicine-related data and perform various administrative tasks.
+- **Admin Dashboard**: The `admin_dashboard` directory contains code for an admin dashboard where administrators can manage medicine data and perform administrative tasks.
 
-Styling: The style directory holds styling files and resources to ensure the application's visual elements are appealing and user-friendly.
+- **Styling**: The `style` directory holds files for styling the project's user interface.
 
-Templates: The templates directory includes templates used in the admin dashboard to display data and information.
+- **Templates**: The `templates` directory includes templates used for rendering data and information in the admin dashboard.
 
-Data Files: The project utilizes data files like .medicine_all.csv.icloud for medicine-related information. This file is actively updated.
+- **Data Files**: The project uses data files like `.medicine_all.csv.icloud` to store and manage medicine-related information.
 
-Composition Calculation: The composition.py script contains logic for calculating the composition of medicines or related calculations.
+- **Composition Calculation**: The `composition.py` script contains logic for calculating the composition of medicines or related calculations.
 
-Getting Started
-If you want to contribute or work with the Medicine Project, here are some steps to get you started:
+## Getting Started
+   - *python composition.py*
 
-Clone the repository: git clone [repository_url]
-Explore the various directories and files to understand the project structure.
-Review the commit history to see recent changes and project updates.
-For development or contributions, create a feature branch: git checkout -b feature/your-feature-name
-Make changes, add new features, or fix bugs.
-Commit your changes: git commit -m "Description of your changes"
-Push your branch to the repository: git push origin feature/your-feature-name
-Create a pull request for your changes to be reviewed and merged into the project.
-Contributors
-[Your Name]
-[Contributor 1]
-[Contributor 2]
+
+
+
+
+
