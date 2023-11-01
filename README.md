@@ -1,38 +1,4 @@
-# DocAssist README
-
-## Overview
-
-Welcome to the DocAssist repository.
-
-## Directory Structure
-
-Here's a quick overview of the project's directory structure and recent commits:
-
-- **web**
-
-  - **static (Directory): contains javascript and css file** 
-    - *admin_dashboard.css*
-    - *admin_dashboard_script.js*
-    - *admin_script.js*
-    - *analysis_script.js*
-    - *bill_script.js*
-    - *prescription_script.js*
-    - *brand_script.js*
-    - *script.js*
-
-  - **templates (Directory) : contains html files**
-    - *index.html*
-    - *admin_dashboard.html*
-    - *admin.html*
-    - *analysis.html*
-    - *bill.html*
-    - *brands.html*
-    - *prescription.html*
-    - *results.html*
-
-  - **composition.py**
-    - *contains flask and dash code*
- 
+# DocAssist Portal
 
 ## Project Description
 
@@ -48,11 +14,58 @@ The Medicine Project is organized into the following components:
 
 - **Composition Calculation**: The `composition.py` script contains all flask framework and dash(plotly framework) codes which is entry point to route to other web pages.
 
+## Project File Structure
+
+```txt
+project/
+│
+├── backend/ (Flask Backend)
+│   ├── app.py (contains flask and dash code)
+│   ├── static/ (contains javascript and css file)
+│   │   ├── admin_dashboard.css
+│   │   ├── admin_dashboard_script.js
+│   │   ├── admin_script.js
+│   │   ├── analysis_script.js
+│   │   ├── bill_script.js
+│   │   ├── prescription_script.js
+│   │   ├── brand_script.js
+│   │   └── script.js
+│   └── templates/ (contains html files)
+│       ├── index.html
+│       ├── admin_dashboard.html
+│       ├── admin.html
+│       ├── analysis.html
+│       ├── bill.html
+│       ├── brands.html
+│       ├── prescription.html
+│       └── results.html
+│
+├── database/ (PostgreSQL Volume)
+│   ├── postgresdb
+│   └── queries/
+│
+├── scrapers/ (Scripts for scraping)
+│   ├── 1mg.py
+│   └── data/
+│       └── 1mg/
+│           ├── all_medicines.csv
+│           └── medicines-by-alphabet/
+│               ├── medicine_dataA.csv
+│               ├── medicine_dataB.csv
+│               ├── ...
+│               └── medicine_dataZ.csv
+└── docs/
+    └── proposal.pdf
+
+```
+
 ## Getting Started
-   - *python composition.py*
 
+```sh
+python composition.py
+```
 
+## Contributors
 
-
-
-
+> Aakash Agrawal
+> Chaitanya Shinge
