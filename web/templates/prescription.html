@@ -7,85 +7,43 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        table {
-            width: 80%;
-            border-collapse: collapse;
-            margin: 20px auto;
-        }
-
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
-
-        #addRowBtn {
-            display: block;
-            margin: 20px auto;
-        }
-
-        .delete-button {
-            background-color: #ff3333;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .patient-info-box {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 20px;
-            background-color: #f0f0f0;
-        }
-    </style>
+    <script src="{{ url_for('static', filename='prescription.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='prescription.css') }}">
 </head>
 <body>
     <div class="patient-info-box">
         <h2>Patient Information</h2>
-        <form id="patientInfoForm">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name"><br><br>
-            
-            <label for="phone">Phone Number:</label>
-            <input type="text" id="phone" name="phone"><br><br>
-            
-            <label for="email">Email:</label>
-            <input type="text" id="email" name="email"><br><br>
-            
-            <label for="address">Address:</label>
-            <input type="text" id="address" name="address"><br><br>
-            
-            <label for="age">Age:</label>
-            <input type="text" id="age" name="age"><br><br>
-            
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date"><br><br>
-            
-            <label for="gender">Gender:</label>
-            <input type="radio" id="male" name="gender" value="male">
-            <label for="male">Male</label>
-            <input type="radio" id="female" name="gender" value="female">
-            <label for="female">Female</label><br><br>
-        </form>
+        <div class="clearfix">
+            <form id="patientInfoForm">
+                    <input type="text" id="name" name="name" placeholder="Name"><br><br>
+                    <input type="text" id="phone" name="phone" placeholder="Phone Number"><br><br>
+                    <input type="text" id="email" name="email" placeholder="Email"><br><br>
+                    <input type="text" id="address" name="address" placeholder="Address"><br><br>
+                    <input type="text" id="age" name="age" placeholder="Age"><br><br>
+                    <input type="date" id="date" name="date" placeholder="Date"><br><br>
+                    
+                    Gender:
+                    <input type="radio" id="male" name="gender" value="male">
+                    <label for="male">Male</label>
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">Female</label><br><br>
+                </form>
+                
+        </div>
     </div>
-
+        
     <h1>Medicine Tracker</h1>
     <table>
         <thead>
             <tr>
                 <th>Medicine Composition</th>
-                <th> (Before Breakfast)</th>
-                <th> (After Breakfast)</th>
-                <th> (Before Lunch)</th>
-                <th> (After Lunch)</th>
-                <th> (Before Dinner)</th>
-                <th> (After Dinner)</th>
+                <th> (Pre Breakfast)</th>
+                <th> (Post Breakfast)</th>
+                <th> (Pre Lunch)</th>
+                <th> (Post Lunch)</th>
+                <th> (Pre Dinner)</th>
+                <th> (Post Dinner)</th>
                 <th>Instructions</th>
-                <th>Delete</th>
             </tr>
         </thead>
         <tbody id="medicineTableBody">
@@ -125,7 +83,7 @@
             compositionSelect.appendChild(defaultOption);
 
             // Add options to the select field
-            const options = ["Option 1", "Option 2", "Option 3"]; // Replace with your actual options
+            const options = []; // Replace with your actual options
             options.forEach(option => {
                 const optionElement = document.createElement("option");
                 optionElement.value = option;
@@ -267,15 +225,9 @@
             const compositionSelect = document.querySelector(".medicine-composition");
             compositionSelect.innerHTML = ''; // Clear existing options
 
-            fetch('/get_medicine_options') // Update the URL to match your Flask route
+            fetch('/prescription-suggest') // Update the URL to match your Flask route
                 .then(response => response.json())
                 .then(data => {
-                    // Add an empty option by default
-                    const defaultOption = document.createElement("option");
-                    defaultOption.value = "";
-                    defaultOption.textContent = "";
-                    compositionSelect.appendChild(defaultOption);
-
                     // Populate select field with options from the database
                     data.forEach(option => {
                         const optionElement = document.createElement("option");
@@ -288,7 +240,10 @@
         }
 
         // Call the function to fetch and populate options when the page loads
-        fetchMedicineOptions();
+        document.addEventListener("DOMContentLoaded", function() {
+            // Call the function to fetch and populate options when the page loads
+            fetchMedicineOptions();
+        });    
     </script>
 </body>
 </html>

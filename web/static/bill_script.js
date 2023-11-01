@@ -1,5 +1,3 @@
-// Inside your existing script.js
-
 const compositionInput = document.getElementById('composition');
 const suggestionsUl = document.getElementById('suggestions');
 const searchForm = document.getElementById('searchForm');

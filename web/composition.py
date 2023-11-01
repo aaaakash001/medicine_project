@@ -5,46 +5,8 @@ from dash import Dash, html, dcc, dash_table
 from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
-
-
-
-app = Flask(__name__)
-
-app_dash = Dash(__name__, server=app, url_base_pathname='/dashboard/')
-
-df = pd.read_csv('/Users/akashagarwal/Downloads/IIT Bombay/CS 699 Software lab/medicine project/medicine_all.csv')
-
-
-#['Medicine Name', 'Manufacturer', 'Medicine Type', 'Active Ingredient', 'MRP', 'Prescription Required'] 
-
-app_dash.layout = html.Div([
-    dcc.Dropdown(
-        id='composition-dropdown',
-        options=[
-            {'label': composition, 'value': composition}
-            for composition in df['Active Ingredient'].unique()
-        ],
-        value=df['Active Ingredient'].unique()[0]
-    ),
-    dcc.Graph(id='bar-chart')
-])
-
-@app_dash.callback(
-    Output('bar-chart', 'figure'),
-    Input('composition-dropdown', 'value')
-)
-def update_histogram(selected_composition):
-    filtered_df = df[df['Active Ingredient'] == selected_composition]
-    fig = px.bar(filtered_df, x='Manufacturer', y='MRP')
-    return fig
-
-
-
-
-
-
-
-
+from sqlalchemy import create_engine
+import dash_table
 
 # Configure your PostgreSQL database connection
 db_config = {
@@ -54,15 +16,77 @@ db_config = {
     'host': 'localhost',
     'port': '5431',
 }
+# Admin databse: ['username', 'password']
 
+
+
+#flask intialize
+app = Flask(__name__,static_folder="static")
+
+db_uri = 'postgresql://:@localhost:5431/postgres'
+engine = create_engine(db_uri)
+
+# Dash initialize
+app_dash = Dash(__name__, server=app, url_base_pathname='/dashboard/')
+
+# Function to fetch unique compositions from the database
+def fetch_unique_compositions_from_db():
+    query = "SELECT DISTINCT composition FROM medicine"
+    compositions = pd.read_sql(query, con=engine)
+    return compositions['composition'].tolist()
+
+# Define your layout
+app_dash.layout = html.Div([
+    dcc.Dropdown(
+        id='composition-dropdown',
+        options=[
+            {'label': composition, 'value': composition}
+            for composition in fetch_unique_compositions_from_db()
+        ],
+        value=fetch_unique_compositions_from_db()[0]
+    ),
+    
+    dash_table.DataTable(
+        id='table',
+        columns=[{'name': col, 'id': col} for col in [ 'brand', 'name','type', 'price']],
+        style_data={'textAlign': 'center'},
+    ),
+    dcc.Graph(id='bar-chart')
+])
+
+# Define the update_histogram function
+@app_dash.callback(
+    [Output('bar-chart', 'figure'),
+     Output('table', 'data')],
+    Input('composition-dropdown', 'value')
+)
+def update_histogram(selected_composition):
+    # Construct the SQL query with placeholders for user inputs
+    query = "SELECT  brand,name, type, price FROM medicine WHERE composition = %s order by brand"
+    
+    # Use the SQLAlchemy engine to execute the query and pass the parameters
+    df = pd.read_sql(query, con=engine, params=(selected_composition,))
+    
+    # Create the bar chart
+    fig = px.bar(df, x='brand', y='price', labels={'price': 'Price'})
+
+    return fig, df.to_dict('records')
+
+
+
+
+#index or main page
 @app.route('/')
 def index():
     return render_template('index.html')
 
-
+#//////////////////////////////////////////////////////
+#bill-page
 @app.route('/bill')
 def bill():
     return render_template('bill.html')
+
+
 
 
 #////////////////////////////////////////////////////////
@@ -101,10 +125,6 @@ def add_medicine():
 
 
 #////////////////////////////////////////////////////////
-
-
-
-#/////////////////////
 #admin page
 @app.route('/admin')
 def admin():
@@ -130,13 +150,39 @@ def admin_search():
         return jsonify({'success': False})
 
 
-#////////////////
-
+#//////////////////////////////////////////////////////////
+#prescription-page
 @app.route('/prescription')
 def prescription():
     return render_template('prescription.html')
 
+# suggestion on search bar while searching for composition.
+@app.route('/prescription-suggest', methods=['GET'])
+def prescription_suggest():
+    search_term = request.args.get('term')
 
+    # Connect to the PostgreSQL database
+    conn = psycopg2.connect(**db_config)
+    cur = conn.cursor()
+
+    # Fetch suggestions based on user input (modify this query to match your database structure)
+    cur.execute("""
+        SELECT composition as medicine_count
+        FROM medicine
+        WHERE composition ILIKE %s
+        ORDER BY composition
+    """, (f'%{search_term}%',))
+    
+    suggestions = [row[0] for row in cur.fetchall()]
+
+    conn.close()
+
+    return jsonify(suggestions)
+
+
+
+#//////////////////////////////////////////////////////////
+#brands-page
 @app.route('/brands')
 def brands():
     return render_template('brands.html')
@@ -180,9 +226,16 @@ def suggest():
 
 
 
-"""
-analysis page
-"""
+#//////////////////////////////////////////////////////////
+#analysis-page
+
+@app.route('/analysis')
+def analysis():
+    return render_template('analysis.html')
+
+# to search for composition and fetch
+# name,composition ,brand, type, price from database
+
 @app.route('/analysis-search', methods=['POST'])
 def analysis_search():
     search_term = request.form['composition']
@@ -201,6 +254,8 @@ def analysis_search():
         # If there are fewer than 5 suggestions, return an empty list or a message
         return jsonify([])
 
+
+# suggestion on search bar while searching for composition.
 @app.route('/analysis-suggest', methods=['GET'])
 def analysis_suggest():
     search_term = request.args.get('term')
@@ -226,14 +281,7 @@ def analysis_suggest():
     return jsonify(suggestions)
 
 
-@app.route('/analysis')
-def analysis():
-    return render_template('analysis.html')
 
-#//////////////////
-
-
-
-
+#/////////////////////////////////////////////////
 if __name__ == '__main__':
     app.run(debug=True)

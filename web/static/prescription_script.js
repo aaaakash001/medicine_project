@@ -1,5 +1,3 @@
-// Inside your existing script.js
-
 const compositionInput = document.getElementById('composition');
 const suggestionsUl = document.getElementById('suggestions');
 const searchForm = document.getElementById('searchForm');
@@ -16,7 +14,7 @@ compositionInput.addEventListener('input', () => {
     }
 
     // Make an AJAX request to get suggestions
-    fetch(`/analysis-suggest?term=${term}`)
+    fetch(`/prescription-suggest?term=${term}`)
         .then(response => response.json())
         .then(data => {
             suggestionsUl.innerHTML = '';

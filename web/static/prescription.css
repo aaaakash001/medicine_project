@@ -1,0 +1,61 @@
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        #addRowBtn {
+            display: block;
+            margin: 20px auto;
+        }
+
+        .delete-button {
+            background-color: #ff3333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+/* Style for the form container */
+#patientInfoForm {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style for labels and input fields */
+  label, input[type="text"], input[type="date"] {
+    display: block;
+    width: 90%;
+    margin-bottom: 5px; /* Reduce the margin to make it more compact */
+  }
+
+  input[type="radio"] {
+    display: block;
+    margin-bottom: 5px; /* Reduce the margin to make it more compact */
+  }
+  
+  /* Style for radio buttons and their labels */
+  input[type="radio"] {
+    display: inline-block;
+    margin: 0 10px 0 0;
+  }
+  
+  label[for="male"], label[for="female"],label[for="gender"] {
+    display: inline;
+  }
+  

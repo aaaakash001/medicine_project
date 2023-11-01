@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.button-container {
+  text-align: center;
+  width: 100%;
+}
+
+.button-container a {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  background-color: #007BFF;
+  color: #ffffff;
+  text-decoration: none;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 24px;
+  transition: background-color 0.3s ease;
+}
+
+.button-container a:hover {
+  background-color: #0056b3;
+}

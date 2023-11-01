@@ -2,12 +2,26 @@
 <html>
 <head>
     <title>Medicine Search</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
-    <a href="{{url_for('analysis')}}">analysis</a>
-    <a href="{{url_for('prescription')}}">prescription</a>
-    <a href="{{url_for('bill')}}">bill</a>
-    <a href="{{url_for('admin')}}">admin</a>
-    <a href="{{url_for('brands')}}">Brands</a>
+    <div class="button-container">
+        <a href="{{url_for('analysis')}}">analysis</a>
+    </div>
+    <div class="button-container">
+        <a href="{{url_for('prescription')}}">prescription</a>
+    </div>
+    <div class="button-container">
+        <a href="{{url_for('bill')}}">bill</a>
+    </div>
+    <div class="button-container">
+        <a href="{{url_for('admin')}}">admin</a>
+    </div>
+    <div class="button-container">
+        <a href="{{url_for('brands')}}">Brands</a>
+    </div>
+    <div class="button-container">
+        <a href="{{url_for('brands')}}">About us</a>
+    </div>
 </body>
 </html>
