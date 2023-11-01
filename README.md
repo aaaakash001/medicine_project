@@ -46,7 +46,7 @@ The Medicine Project is organized into the following components:
 
 - **Data Files**: The project uses data files like `.medicine_all.csv.icloud` to store and manage medicine-related information.
 
-- **Composition Calculation**: The `composition.py` script contains logic for calculating the composition of medicines or related calculations.
+- **Composition Calculation**: The `composition.py` script contains all flask framework and dash(plotly framework) codes which is entry point to route to other web pages.
 
 ## Getting Started
    - *python composition.py*
