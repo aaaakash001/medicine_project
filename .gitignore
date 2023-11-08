@@ -1,6 +1,7 @@
 .env
 .DS_Store
 *.pyc
+*.icloud
 __pycache__/
 .pytest_cache/
 dist/

@@ -62,7 +62,7 @@ project/
 ## Getting Started
 
 ```sh
-python composition.py
+python app.py
 ```
 
 ## Contributors

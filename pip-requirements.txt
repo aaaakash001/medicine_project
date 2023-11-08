@@ -1,0 +1,12 @@
+Flask==2.3.2
+psycopg2-binary==2.9.9
+dash==2.14.1
+dash-core-components==2.0.0
+dash-html-components==2.0.0
+dash-table==5.0.0
+pandas==2.1.2
+plotly==5.18.0
+SQLAlchemy==2.0.22
+requests==2.31.0
+bs4==0.0.1
+python-dotenv==0.19.2
