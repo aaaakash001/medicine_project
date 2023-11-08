@@ -1,14 +1,15 @@
 from flask import Flask, render_template, request
 import psycopg2
 from flask import jsonify
-from dash import Dash, html, dcc, dash_table
+from dash import Dash, html, dcc
+import dash_table
 from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
 from sqlalchemy import create_engine
 import dash_table
 
-# Configure your PostgreSQL database connection
+# Configure PostgreSQL database connection
 db_config = {
     'dbname': 'postgres',
     'user': '',
@@ -26,8 +27,10 @@ app = Flask(__name__,static_folder="static")
 db_uri = 'postgresql://:@localhost:5431/postgres'
 engine = create_engine(db_uri)
 
-# Dash initialize
-app_dash = Dash(__name__, server=app, url_base_pathname='/dashboard/')
+
+#//////////////////////////////////////////////////////////////////
+# Dash initialize composition across brands analysis
+app_dash = Dash(__name__, server=app, url_base_pathname='/composition/')
 
 # Function to fetch unique compositions from the database
 def fetch_unique_compositions_from_db():
@@ -35,7 +38,7 @@ def fetch_unique_compositions_from_db():
     compositions = pd.read_sql(query, con=engine)
     return compositions['composition'].tolist()
 
-# Define your layout
+# Defining layout
 app_dash.layout = html.Div([
     dcc.Dropdown(
         id='composition-dropdown',
@@ -71,6 +74,68 @@ def update_histogram(selected_composition):
     fig = px.bar(df, x='brand', y='price', labels={'price': 'Price'})
 
     return fig, df.to_dict('records')
+
+#////////////////////////////////////////////////////////////////////////////////////////////
+
+brands = Dash(__name__, server=app, url_base_pathname='/brands/')
+
+# Function to fetch unique compositions from the database
+def fetch_unique_brands_from_db():
+    query = "SELECT DISTINCT brand FROM medicine"
+    brand = pd.read_sql(query, con=engine)
+    return brand['brand'].tolist()
+
+# Defining layout
+brands.layout = html.Div([
+    dcc.Dropdown(
+        id='brand-dropdown',
+        options=[
+            {'label': brand, 'value': brand}
+            for brand in fetch_unique_brands_from_db()
+        ],
+        value=fetch_unique_brands_from_db()[0]
+    ),
+    
+    dash_table.DataTable(
+        id='table',
+        columns=[{'name': col, 'id': col} for col in [ 'name', 'composition','type', 'price']],
+        style_data={'textAlign': 'center'},
+    ),
+    dcc.Graph(id='bar-chart')
+])
+
+# Define the update_histogram function
+@brands.callback(
+    [Output('bar-chart', 'figure'),
+     Output('table', 'data')],
+    Input('brand-dropdown', 'value')
+)
+def update_histogram_brands(selected_brands):
+    # Construct the SQL query with placeholders for user inputs
+    query = "SELECT  name,composition, type, price FROM medicine WHERE brand = %s order by name"
+    
+    # Use the SQLAlchemy engine to execute the query and pass the parameters
+    df = pd.read_sql(query, con=engine, params=(selected_brands,))
+    
+    # Create the bar chart
+    fig = px.scatter(df, x='composition', y='price', labels={'price': 'Price'})
+
+    return fig, df.to_dict('records')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -165,7 +230,7 @@ def prescription_suggest():
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor()
 
-    # Fetch suggestions based on user input (modify this query to match your database structure)
+    # Fetch suggestions based on user input
     cur.execute("""
         SELECT composition as medicine_count
         FROM medicine
@@ -215,7 +280,7 @@ def suggest():
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor()
 
-    # Fetch suggestions based on user input (modify this query to match your database structure)
+    # Fetch suggestions based on user input
     cur.execute("SELECT distinct composition FROM medicine WHERE composition ILIKE %s order by composition", (f'%{search_term}%',))
     suggestions = [row[0] for row in cur.fetchall()]
 
@@ -264,7 +329,7 @@ def analysis_suggest():
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor()
 
-    # Fetch suggestions based on user input (modify this query to match your database structure)
+    # Fetch suggestions based on user input
     cur.execute("""
         SELECT composition, COUNT(*) as medicine_count
         FROM medicine
