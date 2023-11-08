@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+</head>
+<body>
+    <div id="login-container" style="text-align: center; margin-top: 100px;">
+        <h1>Admin Login</h1>
+        <form id="login-form" action="admin_dashboard.html" method="post" onsubmit="return validateForm()">
+            <input type="text" id="user" name="username" placeholder="Username" required><br><br>
+            <input type="password" id="pass" name="password" placeholder="Password" required><br><br>
+            <input type="submit" value="Login">
+        </form>
+        <p id="error-message" style="color: red;"></p>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Get the user input
+            const user = document.getElementById("user").value;
+            const pass = document.getElementById("pass").value;
+
+            // Replace this with actual authentication logic (e.g., AJAX request to a server)
+            fetch('/admin-search', {
+                method: 'POST',
+                body: JSON.stringify({ username: user, password: pass }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to the dashboard page on successful login
+                    window.location.href = "admin-dashboard";
+                } else {
+                    // Display an error message
+                    document.getElementById("error-message").textContent = "Invalid username or password. Please try again.";
+                }
+            })
+            .catch(error => {
+                console.error("An error occurred:", error);
+            });
+
+            return false; // Prevent form submission
+        }
+    </script>
+</body>
+</html>
