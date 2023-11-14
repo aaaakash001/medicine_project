@@ -22,7 +22,7 @@ base_url = 'https://www.1mg.com/drugs-all-medicines?label=' + label + '&page='
 csv_filename = 'medicine_data'+label+'.csv'
 with open(csv_filename, mode='w', newline='') as csv_file:
     csv_writer = csv.writer(csv_file)
-    csv_writer.writerow(['Medicine Name', 'Manufacturer', 'Medicine Type','Active Ingredient', 'MRP', 'Prescription Required'])
+    csv_writer.writerow(['name', 'brand', 'type', 'composition', 'price', 'prescription'])
 
 while True:
     # Create the URL for the current page
