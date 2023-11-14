@@ -1,32 +1,18 @@
 from flask import Flask, render_template, request
-import psycopg2
 from flask import jsonify
 from dash import Dash, html, dcc
 import dash_table
 from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
-from sqlalchemy import create_engine
 import dash_table
-
-databaseConfig = {
-    'protocol': 'postgresql',
-    'user': 'docassist',
-    'password': 'aakashchaitanya',
-    'host': 'db',
-    'port': '5432',
-    'database': 'medicine',
-}
+from db import engine, conn
 
 app = Flask(__name__,static_folder="static")
 
-databaseURL = '{protocol}://{user}:{password}@{host}:{port}/{database}'.format(**databaseConfig)
-engine = create_engine(databaseURL)
-
-
 #//////////////////////////////////////////////////////////////////
 # Dash initialize composition across brands analysis
-app_dash = Dash(__name__, server=app, url_base_pathname='/composition/')
+dashApp = Dash(__name__, server=app, url_base_pathname='/composition/')
 
 # Function to fetch unique compositions from the database
 def fetch_unique_compositions_from_db():
@@ -35,7 +21,7 @@ def fetch_unique_compositions_from_db():
     return compositions['composition'].tolist()
 
 # Defining layout
-app_dash.layout = html.Div([
+dashApp.layout = html.Div([
     dcc.Dropdown(
         id='composition-dropdown',
         options=[
@@ -54,17 +40,17 @@ app_dash.layout = html.Div([
 ])
 
 # Define the update_histogram function
-@app_dash.callback(
+@dashApp.callback(
     [Output('bar-chart', 'figure'),
      Output('table', 'data')],
     Input('composition-dropdown', 'value')
 )
-def update_histogram(selected_composition):
+def update_histogram(selectedComposition):
     # Construct the SQL query with placeholders for user inputs
     query = "SELECT  brand,name, type, price FROM medicine WHERE composition = %s order by brand"
     
     # Use the SQLAlchemy engine to execute the query and pass the parameters
-    df = pd.read_sql(query, con=engine, params=(selected_composition,))
+    df = pd.read_sql(query, con=engine, params=(selectedComposition,))
     
     # Create the bar chart
     fig = px.bar(df, x='brand', y='price', labels={'price': 'Price'})
@@ -106,12 +92,12 @@ brands.layout = html.Div([
      Output('table', 'data')],
     Input('brand-dropdown', 'value')
 )
-def update_histogram_brands(selected_brands):
+def update_histogram_brands(selectedBrands):
     # Construct the SQL query with placeholders for user inputs
     query = "SELECT  name,composition, type, price FROM medicine WHERE brand = %s order by name"
     
     # Use the SQLAlchemy engine to execute the query and pass the parameters
-    df = pd.read_sql(query, con=engine, params=(selected_brands,))
+    df = pd.read_sql(query, con=engine, params=(selectedBrands,))
     
     # Create the bar chart
     fig = px.scatter(df, x='composition', y='price', labels={'price': 'Price'})
@@ -158,6 +144,7 @@ def admin_dashboard():
 
 @app.route('/add_medicine', methods=['POST'])
 def add_medicine():
+    global conn
     try:
         name = request.form['name']
         composition = request.form['composition']
@@ -170,7 +157,6 @@ def add_medicine():
       
         
         # Connect to the PostgreSQL database (db_config)
-        conn = psycopg2.connect(**db_config)
         cur = conn.cursor()
 
         # Insert data into the medicine table
@@ -193,11 +179,11 @@ def admin():
 
 @app.route('/admin-search', methods=['POST'])
 def admin_search():
+    global conn
     data = request.get_json()  # Retrieve JSON data from the request body
     search_term = data['username']
     search_password = data['password']
     # Connect to the PostgreSQL database
-    conn = psycopg2.connect(**db_config)
     cur = conn.cursor()
 
     # Query the database
@@ -220,10 +206,10 @@ def prescription():
 # suggestion on search bar while searching for composition.
 @app.route('/prescription-suggest', methods=['GET'])
 def prescription_suggest():
+    global conn
     search_term = request.args.get('term')
 
     # Connect to the PostgreSQL database
-    conn = psycopg2.connect(**db_config)
     cur = conn.cursor()
 
     # Fetch suggestions based on user input
@@ -251,10 +237,10 @@ def brands():
 
 @app.route('/search', methods=['POST'])
 def search():
+    global conn
     search_term = request.form['composition']
     
     # Connect to the PostgreSQL database
-    conn = psycopg2.connect(**db_config)
     cur = conn.cursor()
 
     # Query the database
@@ -270,10 +256,10 @@ def search():
 
 @app.route('/suggest', methods=['GET'])
 def suggest():
+    global conn
     search_term = request.args.get('term')
 
     # Connect to the PostgreSQL database
-    conn = psycopg2.connect(**db_config)
     cur = conn.cursor()
 
     # Fetch suggestions based on user input
@@ -299,9 +285,9 @@ def analysis():
 
 @app.route('/analysis-search', methods=['POST'])
 def analysis_search():
+    global conn
     search_term = request.form['composition']
     # Connect to the PostgreSQL database
-    conn = psycopg2.connect(**db_config)
     cur = conn.cursor()
 
     # Query the database
@@ -319,10 +305,10 @@ def analysis_search():
 # suggestion on search bar while searching for composition.
 @app.route('/analysis-suggest', methods=['GET'])
 def analysis_suggest():
+    global conn
     search_term = request.args.get('term')
 
     # Connect to the PostgreSQL database
-    conn = psycopg2.connect(**db_config)
     cur = conn.cursor()
 
     # Fetch suggestions based on user input

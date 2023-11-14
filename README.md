@@ -89,7 +89,13 @@ cd backend
 python app.py
 ```
 
+## Developers
+
+- Use Camel case for defining variables
+- Use Snake case for defining functions
+- Use Pascal case for defining class names
+
 ## Contributors
 
-> Aakash Agrawal
-> Chaitanya Shinge
+- Aakash Agrawal
+- Chaitanya Shinge
