@@ -8,7 +8,8 @@ services:
       POSTGRES_PASSWORD: aakashchaitanya
       POSTGRES_DB: medicine
     volumes:
-      - /home/cbs/Documents/IIT Bombay/Courses/Software Lab/Project/code/database/postgresdb/data:/var/lib/postgresql/data
+      - ./database/postgresdb/data:/var/lib/postgresql/data
+      - ./database/queries:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
   
