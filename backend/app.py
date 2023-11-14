@@ -9,23 +9,19 @@ import plotly.express as px
 from sqlalchemy import create_engine
 import dash_table
 
-# Configure PostgreSQL database connection
-db_config = {
-    'dbname': 'postgres',
-    'user': '',
-    'password': '',
-    'host': 'localhost',
-    'port': '5431',
+databaseConfig = {
+    'protocol': 'postgresql',
+    'user': 'docassist',
+    'password': 'aakashchaitanya',
+    'host': 'db',
+    'port': '5432',
+    'database': 'medicine',
 }
-# Admin databse: ['username', 'password']
 
-
-
-#flask intialize
 app = Flask(__name__,static_folder="static")
 
-db_uri = 'postgresql://:@localhost:5431/postgres'
-engine = create_engine(db_uri)
+databaseURL = '{protocol}://{user}:{password}@{host}:{port}/{database}'.format(**databaseConfig)
+engine = create_engine(databaseURL)
 
 
 #//////////////////////////////////////////////////////////////////
