@@ -26,8 +26,8 @@ BEGIN
             type VARCHAR,
             composition VARCHAR,
             price REAL,
-            prescription VARCHAR,
-            PRIMARY KEY (name, type, price)
+            prescription VARCHAR NOT NULL,
+            PRIMARY KEY (name, brand, type, composition)
         );
         
         COPY temp_medicine(name, brand, type, composition, price, prescription) FROM '/docker-entrypoint-initdb.d/all_medicines.csv' DELIMITER ',' CSV HEADER;
