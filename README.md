@@ -61,7 +61,31 @@ project/
 
 ## Getting Started
 
+Set the environment
+
+.env file should contain following variables defined:
+
+```txt
+DB_PROTOCOL="postgresql"
+DB_HOST="db"
+DB_PORT="5432"
+DB_USER="docassist"
+DB_PASSWORD="aakashchaitanya"
+DB_NAME="medicine"
+```
+
+Also look for environment variables in docker-compose.yml
+
+To start database
+
 ```sh
+docker-compose up
+```
+
+To start backend server
+
+```sh
+cd backend
 python app.py
 ```
 
