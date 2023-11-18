@@ -1,11 +1,9 @@
 from flask import Flask, render_template, request
 from flask import jsonify
-from dash import Dash, html, dcc
-import dash_table
+from dash import Dash, html, dcc, dash_table
 from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
-import dash_table
 from db import engine, conn
 
 app = Flask(__name__,static_folder="static")

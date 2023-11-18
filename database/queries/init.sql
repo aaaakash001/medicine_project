@@ -10,7 +10,7 @@ BEGIN
         );
         INSERT INTO users(username, name, role, password) VALUES ('admin', 'admin', 'admin', 'admin');
     END IF;
-    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'medicine') THEN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'medicine' OR table_name = 'temp_medicine') THEN
         CREATE TEMPORARY TABLE temp_medicine (
             name VARCHAR,
             brand VARCHAR,

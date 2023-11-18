@@ -5,8 +5,8 @@ import os
 
 load_dotenv()
 
+protocol = os.getenv('DB_PROTOCOL')
 databaseConfig = {
-    'protocol': os.getenv('DB_PROTOCOL'),
     'host': os.getenv('DB_HOST'),
     'port': os.getenv('DB_PORT'),
     'user': os.getenv('DB_USER'),
@@ -14,6 +14,8 @@ databaseConfig = {
     'database': os.getenv('DB_NAME'),
 }
 
-databaseURL = '{protocol}://{user}:{password}@{host}:{port}/{database}'.format(**databaseConfig)
+databaseURL = '{protocol}://{user}:{password}@{host}:{port}/{database}'.format(protocol=protocol, **databaseConfig)
+
+print(databaseURL)
 engine = create_engine(databaseURL)
 conn = connect(**databaseConfig)
