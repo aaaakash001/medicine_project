@@ -67,7 +67,7 @@ Set the environment
 
 ```txt
 DB_PROTOCOL="postgresql"
-DB_HOST="db"
+DB_HOST="localhost"
 DB_PORT="5432"
 DB_USER="docassist"
 DB_PASSWORD="aakashchaitanya"
