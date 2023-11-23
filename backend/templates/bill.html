@@ -1,37 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Medicine Search</title>
-    <style>
-        /* Add CSS styles for the suggestions dropdown */
-        #suggestions {
-            display: none;
-            position: absolute;
-            background-color: white;
-            border: 1px solid #ccc;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        #suggestions li {
-            padding: 5px;
-            cursor: pointer;
-        }
-        #space{
-            height = 300px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Page</title>
+    <link rel="stylesheet" href="../static/bill.css">
+    <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+    <script src="../static/bill_script.js"></script>
 </head>
 <body>
-    <h1>Medicine Search</h1>
-    <form action="/search" method="post" id="searchForm">
-        <label for="composition">Enter Composition:</label>
-        <input id="composition" type="text" name="composition" required>
-        <button type="submit">Search</button>
-    </form>
-    <ul id="suggestions"></ul>
-    <div id="space">
+    <div style="max-width: 1200px; margin: 0 auto;">
+
+        <h1>Bill Page</h1>
+
+        <!-- Your bill content goes here -->
+
+        <div class="form-container">
+            <div>
+                <input type="text" id="medicineSearch" placeholder=" Search Composition" list="compositionList" oninput="getSuggestions(this.value)" onchange="onCompositionSelected()">
+                <datalist id="compositionList"></datalist>
+            </div>
+            <div>
+                <select id="medicineDropdown" oninput="onMedicineSelected(this.value)" disabled>
+                    <option value="">Select Medicine</option>   
+                </select>
+            </div>
+            <div>
+                <input type="number" id="quantityInput" placeholder="Enter quantity" min="1" max="100" disabled>
+            </div>
+        </div>
+
+        <!-- Add Medicine Button -->
+        <button onclick="addMedicineToTable()">Add Medicine</button>
+
+        <!-- Medicine Table -->
+        <table id="medicineTable">
+            <thead>
+                <tr> 
+                    <th>Index</th>
+                    <th>Medicine Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be added dynamically here -->
+            </tbody>
+        </table>
+        <p id="totalPrice">Total Price: 0.00</p>
+
     </div>
-    <div id="search-results"></div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,28 @@
+/* Add this CSS to your existing styles or create a new CSS file */
+
+.prescription-container {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+p {
+    margin: 0;
+}
+
+.medicine-entry {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+h3 {
+    color: white;
+    margin-bottom: 10px;
+}

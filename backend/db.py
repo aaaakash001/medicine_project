@@ -3,16 +3,22 @@ from sqlalchemy import create_engine
 from psycopg2 import connect
 import os
 
-load_dotenv()
+protocol = "postgresql"
+host = "localhost" 
+port = 5432  
+user = "docassist"
+password = "aakashchaitanya"
+database = "medicine"
 
-protocol = os.getenv('DB_PROTOCOL')
 databaseConfig = {
-    'host': os.getenv('DB_HOST'),
-    'port': os.getenv('DB_PORT'),
-    'user': os.getenv('DB_USER'),
-    'password': os.getenv('DB_PASSWORD'),
-    'database': os.getenv('DB_NAME'),
+    'host': host,
+    'port': port,
+    'user': user,
+    'password': password,
+    'database': database,
 }
+
+
 
 databaseURL = '{protocol}://{user}:{password}@{host}:{port}/{database}'.format(protocol=protocol, **databaseConfig)
 
