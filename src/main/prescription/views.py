@@ -11,11 +11,11 @@ def prescription():
 # suggestion on search bar while searching for composition.
 @prescription_bp.route('/prescription-suggest', methods=['GET'])
 def prescription_suggest():
-    global conn
     search_term = request.args.get('term')
 
     # Query the database using SQLAlchemy
     suggestions = get_medicine_data(
         search_term=search_term,
-        columns=['id', 'composition'])
+        columns=['id', 'composition'],distinct=True)
     return jsonify(suggestions)
+

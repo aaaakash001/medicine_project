@@ -17,6 +17,7 @@ def analysis_search():
     results = get_medicine_data(
         search_term=search_term,
         limit=5,
+        distinct=True,
         similar=False)
     if len(results) > 5:
         return jsonify(results)

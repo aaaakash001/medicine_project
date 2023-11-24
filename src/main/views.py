@@ -3,6 +3,8 @@ from src.main import main_bp
 from src.main.prescription import prescription_bp
 from src.main.analysis import analysis_bp
 from src.main.search import search_bp
+from src.main.bill import bill_bp
+from src.main.brands import brands_bp
 from werkzeug.security import check_password_hash
 from src.auth.models import User
 from src.main.utils import allowed_file, insert_from_csv_to_db
@@ -57,18 +59,8 @@ def admin_upload_csv():
         return render_template('admin_dashboard.html', csv_upload_message='Inserted into database')
 
 
-# brands-page
-@main_bp.route('/brands')
-def brands():
-    return render_template('brands.html')
-
-
-# brands-page
-@main_bp.route('/bill')
-def bill():
-    return render_template('bill.html')
-
-
 main_bp.register_blueprint(prescription_bp, url_prefix='/prescription')
 main_bp.register_blueprint(analysis_bp, url_prefix='/analysis')
 main_bp.register_blueprint(search_bp, url_prefix='/search')
+main_bp.register_blueprint(bill_bp, url_prefix='/bill')
+main_bp.register_blueprint(brands_bp, url_prefix='/brands')

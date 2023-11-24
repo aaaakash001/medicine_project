@@ -1,249 +1,137 @@
+<!-- prescription.html -->
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Medicine Tracker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="{{ url_for('static', filename='prescription.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='prescription.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Creator</title>
+    <link rel="stylesheet" href="../static/prescription.css">
+   <!-- Include html2pdf library -->
+<script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+    <script src="../static/prescription_script.js"></script>  
+    <link rel="stylesheet" href="../static/prescription_pdf.css">
+
 </head>
 <body>
-    <div class="patient-info-box">
-        <h2>Patient Information</h2>
-        <div class="clearfix">
-            <form id="patientInfoForm">
-                    <input type="text" id="name" name="name" placeholder="Name"><br><br>
-                    <input type="text" id="phone" name="phone" placeholder="Phone Number"><br><br>
-                    <input type="text" id="email" name="email" placeholder="Email"><br><br>
-                    <input type="text" id="address" name="address" placeholder="Address"><br><br>
-                    <input type="text" id="age" name="age" placeholder="Age"><br><br>
-                    <input type="date" id="date" name="date" placeholder="Date"><br><br>
-                    
-                    Gender:
-                    <input type="radio" id="male" name="gender" value="male">
-                    <label for="male">Male</label>
-                    <input type="radio" id="female" name="gender" value="female">
-                    <label for="female">Female</label><br><br>
-                </form>
-                
-        </div>
+
+    <h2>Prescription Creator</h2>
+
+    <div class="date-section">
+        <label for="prescriptionDate">Date:</label>
+        <input type="date" id="prescriptionDate" name="prescriptionDate">
     </div>
+    <form id="prescriptionForm">
+        <!-- Patient Information Section -->
+        <div class="form-section patient-info-section">
+            <h3>Patient Information</h3>
+
+            <input type="text" id="patientName" name="patientName" placeholder="Patient Name" required>
+
+            <input type="number" id="patientAge" name="patientAge" placeholder="Age" required>
+
+            <select id="patientGender" name="patientGender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+
+            <!-- Additional Patient Information -->
+
+            <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
+
+            <input type="email" id="email" name="email" placeholder="Email" required>
+
+            
+
+            <div class="subsection">
+                <h4>Health metric</h4>
+                <input type="number" id="weight" name="weight" placeholder="Weight (Kg)" required>
+
+                <input type="number" id="height" name="height" placeholder="Height (feet)" required>
+
+                <input type="text" id="bloodPressure" name="bloodPressure" placeholder="Blood Pressure (e.g., 120/80 mmHg)" required>
+            </div>
+        </div>
+
+        <!-- Medicine Section -->
+        <div class="form-section medicine-section">
+            <h3>Medicine Section</h3>
         
-    <h1>Medicine Tracker</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Medicine Composition</th>
-                <th> (Pre Breakfast)</th>
-                <th> (Post Breakfast)</th>
-                <th> (Pre Lunch)</th>
-                <th> (Post Lunch)</th>
-                <th> (Pre Dinner)</th>
-                <th> (Post Dinner)</th>
-                <th>Instructions</th>
-            </tr>
-        </thead>
-        <tbody id="medicineTableBody">
-            <!-- Existing rows go here if any -->
-        </tbody>
-    </table>
+            <input type="text" id="composition" name="composition" list="compositionList" placeholder="Medicine Composition" required>
+            <datalist id="compositionList">
+                {% for composition in compositions %}
+                    <option value="{{ composition }}">
+                {% endfor %}
+            </datalist>
+        
+            <!-- Dosage Section -->
+            <div class="checkbox-group">
+                <label>Dosage:</label>
+                <input type="checkbox" id="dosageBreakfast" name="dosage" value="Breakfast">
+                <label for="dosageBreakfast">Breakfast</label>
+        
+                <input type="checkbox" id="dosageLunch" name="dosage" value="Lunch">
+                <label for="dosageLunch">Lunch</label>
+        
+                <input type="checkbox" id="dosageDinner" name="dosage" value="Dinner">
+                <label for="dosageDinner">Dinner</label>
+            </div>
+        
+            <!-- Frequency Section -->
+            <div class="radio-group">
+                <label>Take:</label>
+                <input type="radio" id="frequencyBefore" name="frequency" value="Before Food">
+                <label for="frequencyBefore">Before</label>
+        
+                <input type="radio" id="frequencyAfter" name="frequency" value="After Food">
+                <label for="frequencyAfter">After</label>
+        
+                <input type="radio" id="frequencyBoth" name="frequency" value="Before and After Food">
+                <label for="frequencyBoth">Both</label>
+            </div>
+        
+            <input type="text" id="duration" name="duration" placeholder="Duration" required>
+            <br>
+            <textarea id="instructions" name="instructions" rows="4" placeholder="Instructions" required></textarea>
+        
+            <!-- Add Prescription Button -->
+            <br>
+            <button type="button" onclick="addPrescription()">Add Prescription</button>
+        </div>
 
+        <!-- Prescription Table -->
+        <div class="form-section">
+            <h3>Prescription Table</h3>
+            <table id="prescriptionTable">
+                <thead>
+                    <tr>
+                        <th>Medicine Composition</th>
+                        <th>Dosage</th>
+                        <th>Take</th>
+                        <th>Duration</th>
+                        <th>Instructions</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="prescriptionTableBody">
+                    <!-- Prescription details will be added dynamically here -->
+                </tbody>
+            </table>
+        </div>
 
+        <!-- Additional Information Section -->
+        <div class="form-section">
+            <h3>Additional Information</h3>
+            <textarea id="additionalNotes" name="additionalNotes" rows="4" placeholder="Additional Notes"></textarea>
+        </div>
 
-    <button id="addRowBtn">Add Row</button>
-    <button id="printPdfBtn">Print PDF</button>
+        <!-- Generate Prescription Button -->
+        <button type="button" onclick="generatePrescription()">Generate Prescription</button>
+    </form>
 
-    <script>
-        // Function to initialize Selectize for a specific row
-                // Function to initialize Selectize for a specific row
-        function initializeSelectize(row) {
-            const compositionSelect = row.querySelector(".medicine-composition");
-            $(compositionSelect).selectize({
-                create: false,
-            });
-        }
+    <!-- Include your script tags and other content here -->
 
-        // Function to add a new row to the table
-        function addRow() {
-            const tableBody = document.getElementById("medicineTableBody");
-            const newRow = document.createElement("tr");
-
-            // Medicine Composition (Selectize Field)
-            const compositionCell = document.createElement("td");
-            const compositionSelect = document.createElement("select");
-            compositionSelect.setAttribute("class", "medicine-composition");
-
-            // Add an empty option by default
-            const defaultOption = document.createElement("option");
-            defaultOption.value = "";
-            defaultOption.textContent = "";
-            compositionSelect.appendChild(defaultOption);
-
-            // Add options to the select field
-            const options = []; // Replace with your actual options
-            options.forEach(option => {
-                const optionElement = document.createElement("option");
-                optionElement.value = option;
-                optionElement.textContent = option;
-                compositionSelect.appendChild(optionElement);
-            });
-
-            compositionCell.appendChild(compositionSelect);
-            newRow.appendChild(compositionCell);
-
-            // Tablets (Before and After Food) - Breakfast, Lunch, Dinner
-            for (let i = 1; i <= 6; i++) {
-                const tabletsCell = document.createElement("td");
-                tabletsCell.classList.add("tablet-cell");
-                const defaultValue = "0";
-                tabletsCell.innerHTML = `<input maxlength="1" size="1" type="number" step="0.5" placeholder="Tablets" value="${defaultValue}" min="0" max="9">`;
-                
-                newRow.appendChild(tabletsCell);
-            }
-
-            // Instructions (Input Field)
-            const instructionsCell = document.createElement("td");
-            const instructionsInput = document.createElement("input");
-            instructionsInput.setAttribute("type", "text");
-            instructionsInput.setAttribute("placeholder", "Instructions");
-            instructionsCell.appendChild(instructionsInput);
-
-            newRow.appendChild(instructionsCell);
-
-            // Delete Button
-            const deleteCell = document.createElement("td");
-            const deleteButton = document.createElement("button");
-            deleteButton.innerText = "Delete";
-            deleteButton.classList.add("delete-button");
-            deleteButton.addEventListener("click", () => {
-                tableBody.removeChild(newRow);
-            });
-
-            deleteCell.appendChild(deleteButton);
-            newRow.appendChild(deleteCell);
-
-            tableBody.appendChild(newRow);
-
-            // Initialize Selectize for the new row
-            initializeSelectize(newRow);
-        }
-
-       
-        function printPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    // Patient Information
-    doc.setFontSize(16);
-    doc.text("Patient Information", 20, 20);
-    doc.setFontSize(12);
-
-    // Extract and add patient information from the form
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const email = document.getElementById("email").value;
-    const address = document.getElementById("address").value;
-    const age = document.getElementById("age").value;
-    const date = document.getElementById("date").value;
-    const gender = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : '';
-
-    doc.text(`Name: ${name}`, 20, 30);
-    doc.text(`Phone: ${phone}`, 20, 40);
-    doc.text(`Email: ${email}`, 20, 50);
-    doc.text(`Address: ${address}`, 20, 60);
-    doc.text(`Age: ${age}`, 20, 70);
-    doc.text(`Date: ${date}`, 20, 80);
-    doc.text(`Gender: ${gender}`, 20, 90);
-
-    // Medicine Tracking Table
-    doc.addPage();
-    doc.setFontSize(16);
-    doc.text("Medicine Tracking", 20, 20);
-
-    // Table Headings
-    const tableHeadings = [
-        "Medicine Composition",
-        "Before Breakfast",
-        "After Breakfast",
-        "Before Lunch",
-        "After Lunch",
-        "Before Dinner",
-        "After Dinner",
-        "Instructions"
-    ];
-
-    let xOffset = 20;
-    tableHeadings.forEach((heading, index) => {
-        doc.text(heading, xOffset, 30);
-        xOffset += 40; // Adjust this value for column spacing
-    });
-
-    // Extract and print data from all rows
-    const tableRows = document.querySelectorAll("#medicineTableBody tr");
-    let yOffset = 40;
-
-    tableRows.forEach(row => {
-        const compositionSelect = row.querySelector(".medicine-composition select");
-        const tabletsInputs = Array.from(row.querySelectorAll(".tablet-cell input"));
-        const instructionsInput = row.querySelector(".instructions-cell input");
-
-        const composition = compositionSelect ? compositionSelect.value : '';
-        const tablets = tabletsInputs.map(input => input.value);
-        const instructions = instructionsInput ? instructionsInput.value : '';
-
-        const rowData = [
-            composition,
-            ...tablets,
-            instructions
-        ];
-
-        let xOffset = 20;
-        rowData.forEach(data => {
-            doc.text(data, xOffset, yOffset);
-            xOffset += 40; // Adjust this value for column spacing
-        });
-
-        yOffset += 10; // Adjust this value for row spacing
-    });
-
-    // Save or print the PDF
-    doc.save("Medicine_Tracker.pdf"); // Save the PDF with a specific filename
-}
-
-
-        const addRowBtn = document.getElementById("addRowBtn");
-        addRowBtn.addEventListener("click", addRow);
-
-        const printPdfBtn = document.getElementById("printPdfBtn");
-        printPdfBtn.addEventListener("click", printPDF);
-
-        // Function to fetch medicine options and populate the select field
-        function fetchMedicineOptions() {
-            const compositionSelect = document.querySelector(".medicine-composition");
-            compositionSelect.innerHTML = ''; // Clear existing options
-
-            fetch('/prescription-suggest') // Update the URL to match your Flask route
-                .then(response => response.json())
-                .then(data => {
-                    // Populate select field with options from the database
-                    data.forEach(option => {
-                        const optionElement = document.createElement("option");
-                        optionElement.value = option;
-                        optionElement.textContent = option;
-                        compositionSelect.appendChild(optionElement);
-                    });
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        // Call the function to fetch and populate options when the page loads
-        document.addEventListener("DOMContentLoaded", function() {
-            // Call the function to fetch and populate options when the page loads
-            fetchMedicineOptions();
-        });    
-    </script>
 </body>
 </html>
