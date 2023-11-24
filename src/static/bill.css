@@ -1,0 +1,89 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+    background-color: #f8f8f8;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin: 10px 0;
+    color: #555;
+}
+
+input, select, button {
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+button {
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #4caf50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.form-container div {
+    flex: 0 0 40%; /* Composition and medicine fields take 90% */
+    margin-bottom: 10px;
+}
+
+.form-container div:last-child {
+    flex: 0 0 10%; /* Quantity field takes 10% */
+}
+
+/* Additional styling for better spacing and alignment */
+.form-container label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Adjust button styling for better alignment */
+.form-container button {
+    flex: 0 0 100%; /* Make the button span the full width */
+    margin-top: 10px;
+}
+
+#totalPrice {
+    font-size: 18px; /* Adjust the font size as needed */
+    font-weight: bold;
+    margin-top: 10px; /* Adjust the margin as needed */
+    float: right;
+    margin-right: 50px;
+}

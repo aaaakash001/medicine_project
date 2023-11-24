@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+            Login
+        </title>
+    </head>
+    <body>
+        <h2>Login</h2>
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.username.label }} {{ form.username(size=20) }}
+                {% for error in form.username.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div>
+                {{ form.password.label }} {{ form.password(size=20) }}
+                {% for error in form.password.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div>{{ form.submit() }}</div>
+        </form>
+        <a class="no-purpose-redirect" href="{{url_for('auth_bp.register')}}">
+            Don't have an account? Register Now!
+        </a>
+    </body>
+</html>
