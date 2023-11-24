@@ -19,9 +19,20 @@
         <input type="checkbox" id="prescription" name="prescription"> Prescription Required<br><br>
         <input type="submit" value="Add Medicine">
     </form>
-    
-
     <div id="result-message"></div>
+    
+    <div>
+        <h2>Upload csv files containing medicines</h2>
+        <form method="post" action="{{ url_for('main_bp.admin_upload_csv') }}" enctype="multipart/form-data">
+            <input type="file" id="csv-file" name="csv-file" accept=".csv" required/><br/><br/>
+            <input type="submit" value="Upload" />
+        </form>
+        {% if csv_upload_message %}
+            <p>{{ csv_upload_message }}</p>
+        {% endif %}
+    </div>
+
+
 
 
 </body>

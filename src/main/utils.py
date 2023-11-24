@@ -66,8 +66,8 @@ def get_medicine_data(
             queryResults] if columns else queryResults
 
 
-def insert_from_csv_to_db(csv_file_path, table_name):
-    with open(csv_file_path, 'r') as file:
+def insert_from_csv_to_db(content, is_stream=False):
+    with content if is_stream else open(content, 'r') as file:
         reader = csv.reader(file)
         header = next(reader)
 
@@ -77,13 +77,16 @@ def insert_from_csv_to_db(csv_file_path, table_name):
             row = [value if value != '' else None for value in row]
             rows.append(dict(zip(header, row)))
 
-        # Use bulk_insert_mappings to insert rows in bulk
-        with db.engine.connect() as connection:
-            connection.execute(Medicine.__table__.insert().values(rows))
+        try:
+            # Use bulk_insert_mappings to insert rows in bulk
+            with db.engine.connect() as connection:
+                connection.execute(Medicine.__table__.insert().values(rows))
+        except Exception as e:
+            return str(e)
 
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {
-        'csv'
+        'csv',
     }
     return '.' in filename and filename.rsplit('.', 1)[-1].lower() in ALLOWED_EXTENSIONS

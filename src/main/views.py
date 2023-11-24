@@ -5,6 +5,7 @@ from src.main.analysis import analysis_bp
 from src.main.search import search_bp
 from werkzeug.security import check_password_hash
 from src.auth.models import User
+from src.main.utils import allowed_file, insert_from_csv_to_db
 
 
 # index or main page
@@ -40,6 +41,20 @@ def admin_search():
         return jsonify({'success': True})
     else:
         return jsonify({'success': False})
+
+
+@main_bp.route('/admin-upload', methods=['POST'])
+def admin_upload_csv():
+    if('file' in request.files):
+        file = request.files['file']
+        if (file and file.filename != '' and allowed_file(file.filename)):
+            res, err = insert_from_csv_to_db(file.stream, is_stream=True)
+    if (res is None):
+        return render_template('admin_dashboard.html', csv_upload_message='File not received')
+    elif (err is not None):
+        return render_template('admin_dashboard.html', csv_upload_message=err)
+    else:
+        return render_template('admin_dashboard.html', csv_upload_message='Inserted into database')
 
 
 # brands-page
