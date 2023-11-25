@@ -1,6 +1,100 @@
 // prescription_script.js
 
-// ... (previous code) ...
+// Function to set the current date for the prescriptionDate input
+function setCurrentDate() {
+    var currentDate = new Date();
+    var year = currentDate.getFullYear();
+    var month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Adding 1 because months are zero-indexed
+    var day = ('0' + currentDate.getDate()).slice(-2);
+
+    var formattedDate = year + '-' + month + '-' + day;
+
+    document.getElementById("prescriptionDate").value = formattedDate;
+}
+
+// Set the current date when the page loads
+window.onload = function() {
+    setCurrentDate();
+};
+
+let isMedicineSectionValidated = false;
+
+function validateForm() {
+    clearErrorMessages();
+
+    var isValid = true;
+
+    // Patient Information Validation
+    isValid = validateField("patientName", "Please enter the patient's name.") && isValid;
+    isValid = validateField("patientAge", "Please enter the patient's age.") && isValid;
+    // Add similar lines for other fields...
+
+    // Medicine Section Validation (only validate if not already validated)
+    if (!isMedicineSectionValidated) {
+        isValid = validateField("composition", "Please enter the medicine composition.") && isValid;
+        isValid = validateCheckbox("dosage", "Please select at least one dosage option.") && isValid;
+        isValid = validateRadio("frequency", "Please select a frequency option.") && isValid;
+        isValid = validateField("duration", "Please enter the duration.") && isValid;
+        isValid = validateField("instructions", "Please enter the instructions.") && isValid;
+
+        // Set the flag to true after successful validation
+        if (isValid) {
+            isMedicineSectionValidated = true;
+        }
+    }
+
+    return isValid;
+}
+
+function validateField(fieldName, errorMessage) {
+    var field = document.getElementById(fieldName);
+    var fieldValue = field.value.trim();
+
+    if (!fieldValue) {
+        displayError(field, errorMessage);
+        return false;
+    }
+
+    return true;
+}
+
+function validateCheckbox(checkboxName, errorMessage) {
+    var checkboxes = document.getElementsByName(checkboxName);
+    var isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+    if (!isChecked) {
+        displayError(checkboxes[0], errorMessage);
+        return false;
+    }
+
+    return true;
+}
+
+function validateRadio(radioName, errorMessage) {
+    var radios = document.getElementsByName(radioName);
+    var isChecked = Array.from(radios).some(radio => radio.checked);
+
+    if (!isChecked) {
+        displayError(radios[0], errorMessage);
+        return false;
+    }
+
+    return true;
+}
+function displayError(element, errorMessage) {
+    var errorSpan = document.createElement("span");
+    errorSpan.className = "error-message";
+    errorSpan.innerHTML = errorMessage;
+
+    element.parentNode.appendChild(errorSpan);
+}
+
+function clearErrorMessages() {
+    var errorMessages = document.querySelectorAll(".error-message");
+    errorMessages.forEach(function (errorMessage) {
+        errorMessage.parentNode.removeChild(errorMessage);
+    });
+}
 
 function getPrescriptionData() {
     var prescriptionData = [];
@@ -27,8 +121,11 @@ function getPrescriptionData() {
     return prescriptionData;
 }
 
-
 function addPrescription() {
+    if (!validateForm()) {
+        return;
+    }
+
     var composition = document.getElementById("composition").value;
     var dosage = getCheckboxValues("dosage");
     var frequency = getRadioValue("frequency");
@@ -97,11 +194,15 @@ function clearPrescriptionForm() {
     document.getElementById("instructions").value = "";
 }
 
-// ... (remaining code) ...
-// prescription_script.js
-// prescription_script.js
-
 function generatePrescription() {
+    // Clear existing error messages
+    clearErrorMessages();
+
+    // Validate the form before generating the prescription
+    if (!validateForm()) {
+        return;
+    }
+
     // Hospital Information (you can customize this)
     var hospitalInfo = "Your Hospital Name\nAddress: Hospital Address\nPhone: Hospital Phone";
 
@@ -119,9 +220,9 @@ function generatePrescription() {
     // Additional Information
     var additionalNotes = document.getElementById('additionalNotes').value;
 
-    // Create HTML content
+    // Create HTML content for the prescription
     var content = `
-        <div style="font-family: 'Arial', sans-serif; max-width: 800px; margin: 20px auto; font-size: 12px;">
+        <div style="font-family: 'Arial', sans-serif; max-width: 800px; margin: 20px auto; font-size: 12px;padding:20px">
             <div style="background-color: #f4f4f4; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
                 <div style="color: #4caf50; text-align: center; font-size: 20px; margin-bottom: 15px;">Your Hospital Name</div>
                 <div><strong>Address:</strong> Hospital Address</div>
@@ -177,10 +278,6 @@ function generatePrescription() {
         </div>
     `;
 
-    // Convert HTML to PDF
+    // Convert HTML to PDF using html2pdf library
     html2pdf().from(content).save('prescription.pdf');
 }
-
-
-
-
