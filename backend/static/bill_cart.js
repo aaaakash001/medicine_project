@@ -44,16 +44,17 @@ class Cart {
 
     updateQuantity(medName, change) {
         let currentQuantity = this.medicines[medName].quantity + change;
-
-        if (currentQuantity > 0) {
+    
+        if (currentQuantity >= 1) {
             this.medicines[medName].quantity = currentQuantity;
             this.updateTable();
         } else {
-            // If quantity becomes 0, remove the medicine from the cart
-            delete this.medicines[medName];
+            // If quantity becomes less than 1, set it to 1
+            this.medicines[medName].quantity = 1;
             this.updateTable();
         }
     }
+    
 
     removeMedicine(medName) {
         delete this.medicines[medName];
@@ -93,15 +94,17 @@ class Cart {
             const spanQuantity = document.createElement('span');
             spanQuantity.innerHTML = quantity.toString();
     
-            // Add buttons
+         // Add buttons
             const addButton = document.createElement('button');
             addButton.innerHTML = '+';
+            addButton.className = 'quantity-button';
             addButton.onclick = () => this.updateQuantity(medName, 1);
-    
+
             const subtractButton = document.createElement('button');
             subtractButton.innerHTML = '-';
+            subtractButton.className = 'quantity-button';
             subtractButton.onclick = () => this.updateQuantity(medName, -1);
-    
+            
             const deleteButton = document.createElement('button');
             deleteButton.innerHTML = 'Delete';
             deleteButton.onclick = () => this.removeMedicine(medName);

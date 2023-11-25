@@ -87,3 +87,23 @@ tr:nth-child(even) {
     float: right;
     margin-right: 50px;
 }
+
+/* Style for quantity update buttons */
+/* Style for quantity update buttons */
+.quantity-buttons {
+    display: inline-block;
+    align-items: center;
+}
+
+.quantity-buttons .quantity-button {
+    margin: 0 5px;
+    padding: 5px 8px;
+    background-color: #ddd; /* Adjust the background color as needed */
+    border: 1px solid #aaa; /* Adjust the border color as needed */
+    color: #333; /* Adjust the text color as needed */
+    cursor: pointer;
+}
+
+.quantity-buttons .quantity-button:hover {
+    background-color: #ccc; /* Adjust the hover background color as needed */
+}
