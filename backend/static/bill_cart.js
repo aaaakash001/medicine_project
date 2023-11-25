@@ -169,10 +169,10 @@ class Cart {
     generateTableHtml() {
         // Generate HTML content for the table based on the medicines in the cart
         let tableHtml = '<table style="width:100%;"><thead><tr><th>Index</th><th>Medicine Name</th><th>Price</th><th>Quantity</th><th>Total Price</th></tr></thead><tbody>';
-
+        let index = 1;
         for (const medName in this.medicines) {
             const medicine = this.medicines[medName];
-            tableHtml += `<tr><td>${this.rowIndex}</td><td>${medicine.name}</td><td>${medicine.price.toFixed(2)}</td><td>${medicine.quantity}</td><td>${(medicine.price * medicine.quantity).toFixed(2)}</td></tr>`;
+            tableHtml += `<tr><td>${index++}</td><td>${medicine.name}</td><td>${medicine.price.toFixed(2)}</td><td>${medicine.quantity}</td><td>${(medicine.price * medicine.quantity).toFixed(2)}</td></tr>`;
         }
 
         tableHtml += `<tr><td></td><td></td><td></td><td>Total:</td><td>${this.calculateTotalPrice().toFixed(2)}</td></tr>`;
