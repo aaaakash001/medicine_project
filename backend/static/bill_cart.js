@@ -92,15 +92,18 @@ class Cart {
     
             // Update the quantity cell with the current quantity
             const spanQuantity = document.createElement('span');
+            spanQuantity.className = 'quantity-text';
             spanQuantity.innerHTML = quantity.toString();
     
          // Add buttons
             const addButton = document.createElement('button');
+            addButton.className = 'quantity-button add';
             addButton.innerHTML = '+';
             addButton.className = 'quantity-button';
             addButton.onclick = () => this.updateQuantity(medName, 1);
 
             const subtractButton = document.createElement('button');
+            subtractButton.className = 'quantity-button subtract';
             subtractButton.innerHTML = '-';
             subtractButton.className = 'quantity-button';
             subtractButton.onclick = () => this.updateQuantity(medName, -1);
@@ -109,6 +112,7 @@ class Cart {
             deleteButton.innerHTML = 'Delete';
             deleteButton.onclick = () => this.removeMedicine(medName);
     
+            quantityCell.className = 'quantity-container';
             quantityCell.appendChild(subtractButton);
             quantityCell.appendChild(spanQuantity);
             quantityCell.appendChild(addButton);
@@ -144,13 +148,13 @@ class Cart {
             dateTimeString += '-' + date.toLocaleTimeString().replace(/[TZ:]/g, '-');
 
             // HTML content for the header
-            const headerHtml = `<header><p style="text-align: right;">Generated on: ${date.toISOString()}</p></header>`;
+            const headerHtml = `<header><p style="text-align: right;">Generated on: ${date.toISOString().replace(/[TZ]/g, ' ')}</p></header>`;
 
             // HTML content for the table (body)
             const tableHtml = this.generateTableHtml();
 
             // HTML content for the footer
-            const footerHtml = '<footer><p style="position: fixed; bottom: 0; width: 100%; text-align: right;">Generated from DocAssist Portal</p></footer>';
+            const footerHtml = '<footer style="position: fixed; bottom: 10px; width: 100%; "><p style="text-align: right;">Generated from DocAssist Portal</p></footer>';
 
             // Combine HTML content
             const combinedHtml = `${headerHtml}${tableHtml}${footerHtml}`;
