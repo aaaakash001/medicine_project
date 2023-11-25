@@ -59,21 +59,23 @@ class Cart {
         delete this.medicines[medName];
         this.updateTable();
     }
-
     updateTable() {
         // Clear existing rows
         while (this.table.rows.length > 1) {
             this.table.deleteRow(1);
         }
-
+    
+        // Reset the index for each update
+        this.rowIndex = 1;
+    
         // Add new rows based on cart data
         for (const medName in this.medicines) {
             const medicine = this.medicines[medName];
             const quantity = medicine.quantity;
-
+    
             // Create a new row
             const newRow = this.table.insertRow();
-
+    
             // Insert cells into the row
             const indexCell = newRow.insertCell(0);
             const medicineCell = newRow.insertCell(1);
@@ -81,44 +83,44 @@ class Cart {
             const quantityCell = newRow.insertCell(3);
             const totalPriceCell = newRow.insertCell(4);
             const actionCell = newRow.insertCell(5);
-
+    
             // Populate cells with data
             indexCell.innerHTML = this.rowIndex++;
             medicineCell.innerHTML = medicine.name;
             priceCell.innerHTML = medicine.price.toFixed(2);
-
+    
             // Update the quantity cell with the current quantity
             const spanQuantity = document.createElement('span');
             spanQuantity.innerHTML = quantity.toString();
-
+    
             // Add buttons
             const addButton = document.createElement('button');
             addButton.innerHTML = '+';
             addButton.onclick = () => this.updateQuantity(medName, 1);
-
+    
             const subtractButton = document.createElement('button');
             subtractButton.innerHTML = '-';
             subtractButton.onclick = () => this.updateQuantity(medName, -1);
-
+    
             const deleteButton = document.createElement('button');
             deleteButton.innerHTML = 'Delete';
             deleteButton.onclick = () => this.removeMedicine(medName);
-
+    
             quantityCell.appendChild(subtractButton);
             quantityCell.appendChild(spanQuantity);
             quantityCell.appendChild(addButton);
-
+    
             // Calculate total price
             const totalPrice = quantity * medicine.price;
             totalPriceCell.innerHTML = totalPrice.toFixed(2);
-
+    
             actionCell.appendChild(deleteButton);
         }
-
+    
         // Update the total price
         this.updateTotalPrice();
     }
-
+    
     updateTotalPrice() {
         let total = 0;
 
