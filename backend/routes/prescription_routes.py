@@ -37,6 +37,4 @@ def prescription_suggest():
 
     suggestions = [row[0] for row in cur.fetchall()]
 
-    conn.close()
-
     return jsonify(suggestions)

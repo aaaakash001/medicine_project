@@ -25,7 +25,7 @@ def analysis_search():
         "SELECT name,composition ,brand, type, price FROM medicine WHERE composition = %s order by composition", (f'{search_term}',))
     result = cur.fetchall()
     print("length of result ", len(result), "Type of result", type(result))
-    conn.close()
+
     if len(result) > 5:
         return jsonify(result)
     else:
@@ -53,7 +53,5 @@ def analysis_suggest():
     """, (f'%{search_term}%',))
 
     suggestions = [row[0] for row in cur.fetchall()]
-
-    conn.close()
 
     return jsonify(suggestions)

@@ -22,7 +22,7 @@ def admin_search():
     cur.execute(
         "SELECT username, password FROM users WHERE username = %s", (f'{search_term}',))
     result = cur.fetchone()
-    conn.close()
+
     print(result)
     if result and result[1] == search_password:
         return jsonify({'success': True})
@@ -56,7 +56,6 @@ def add_medicine():
                     (name, composition, brand, type, price, prescription_required))
 
         conn.commit()
-        conn.close()
 
         return jsonify({'success': True, 'message': 'Medicine added successfully.'})
     except Exception as e:

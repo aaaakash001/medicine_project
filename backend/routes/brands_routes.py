@@ -29,7 +29,6 @@ def search():
         "SELECT name,composition ,brand, type, price FROM medicine WHERE composition ILIKE %s order by composition", (f'%{search_term}%',))
     result = cur.fetchall()
 
-    conn.close()
     return jsonify(result)
 
 
@@ -45,8 +44,6 @@ def suggest():
     cur.execute(
         "SELECT distinct composition FROM medicine WHERE composition ILIKE %s order by composition", (f'%{search_term}%',))
     suggestions = [row[0] for row in cur.fetchall()]
-
-    conn.close()
 
     return jsonify(suggestions)
 
