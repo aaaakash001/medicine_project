@@ -87,3 +87,33 @@ tr:nth-child(even) {
     float: right;
     margin-right: 50px;
 }
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.quantity-text {
+    margin: 0 5px;
+}
+
+.quantity-button {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; 
+    text-align: center;
+    cursor: pointer;
+    background-color: #4caf50; 
+    color: #fff; 
+    border: none;
+}
+
+.quantity-button.add {
+    margin-left: 5px;
+}
+
+.quantity-button.subtract {
+    margin-right: 5px;
+}
