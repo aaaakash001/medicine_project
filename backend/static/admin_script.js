@@ -70,3 +70,32 @@ searchForm.addEventListener('submit', (event) => {
             console.error('Error fetching search result:', error);
         });
 });
+function validateForm() {
+    // Get the user input
+    const user = document.getElementById("user").value;
+    const pass = document.getElementById("pass").value;
+
+    // Replace this with actual authentication logic (e.g., AJAX request to a server)
+    fetch('/admin-search', {
+        method: 'POST',
+        body: JSON.stringify({ username: user, password: pass }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Redirect to the dashboard page on successful login
+            window.location.href = "admin-dashboard";
+        } else {
+            // Display an error message
+            document.getElementById("error-message").textContent = "Invalid username or password. Please try again.";
+        }
+    })
+    .catch(error => {
+        console.error("An error occurred:", error);
+    });
+
+    return false; // Prevent form submission
+}

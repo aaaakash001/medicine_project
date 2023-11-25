@@ -204,9 +204,17 @@ function generatePrescription() {
     }
 
     // Hospital Information (you can customize this)
-    var hospitalInfo = "Your Hospital Name\nAddress: Hospital Address\nPhone: Hospital Phone";
+    var hospital_name = document.getElementById('hospitalName').value;
+    var hospital_address =document.getElementById('hospitalAddress').value;
+    var hospital_phone = document.getElementById('hospitalPhone').value;
+
+    console.log("Hospital Name:", hospital_name);
+    console.log("Hospital Address:", hospital_address);
+    console.log("Hospital Phone:", hospital_phone);
+
 
     // Get patient information
+    var date = document.getElementById('prescriptionDate').value;
     var patientName = document.getElementById('patientName').value;
     var patientAge = document.getElementById('patientAge').value;
     var patientGender = document.getElementById('patientGender').value;
@@ -223,10 +231,16 @@ function generatePrescription() {
     // Create HTML content for the prescription
     var content = `
         <div style="font-family: 'Arial', sans-serif; max-width: 800px; margin: 20px auto; font-size: 12px;padding:20px">
-            <div style="background-color: #f4f4f4; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
+         <div style="background-color: #f4f4f4; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
+                <div style="color: #4caf50; text-align: center; font-size: 20px; margin-bottom: 15px;">Prescription Date</div>
+                <div><strong>Date:</strong> ${date}</div>
+            </div>  
+            <br>  
+        <div style="background-color: #f4f4f4; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
                 <div style="color: #4caf50; text-align: center; font-size: 20px; margin-bottom: 15px;">Your Hospital Name</div>
-                <div><strong>Address:</strong> Hospital Address</div>
-                <div><strong>Phone:</strong> Hospital Phone</div>
+                <div><strong>Hospital Name:</strong> ${hospital_name}</div>
+                <div><strong>Hospital Address:</strong> ${hospital_address}</div>
+                <div><strong>Hospital Phone:</strong> ${hospital_phone}</div>
             </div>
             <br>
             <div style="display: flex; justify-content: space-between; margin-bottom: 20px;margin-bottom: 20px;">
@@ -247,8 +261,8 @@ function generatePrescription() {
 
             <div style="background-color: #f4f4f4; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin-bottom: 20px; padding: 20px;">
                 <h2 style="color: #4caf50; margin-bottom: 15px; font-size: 20px;">Medicine Information</h2>
-                <table style="width: 100%; border-collapse: collapse;">
-                    <thead>
+                <table style="width: 100%; border-collapse: collapse; text-align:left">
+                    <thead style="margin-bottom:20px">
                         <tr>
                             <th>Medicine</th>
                             <th>Dosage</th>
@@ -271,7 +285,7 @@ function generatePrescription() {
                 </table>
             </div>
 
-            <div style="background-color: #f4f4f4; min-height:200px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
+            <div style="background-color: #f4f4f4; min-height:400px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
                 <h2 style="color: #4caf50; margin-bottom: 15px; font-size: 20px;">Additional Details</h2>
                 <div>${additionalNotes}</div>
             </div>

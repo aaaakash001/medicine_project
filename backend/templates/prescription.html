@@ -25,9 +25,9 @@
     <h3>Hospital Information</h3>
     <!-- Hospital Information Section -->
     <div class="hospital-info-section">
-        <input type="text" id="hospitalName" name="hospitalName" placeholder="Hospital Name" required>
-        <input type="tel" id="hospitalPhone" name="hospitalPhone" placeholder="Hospital Phone" required>
-        <textarea id="hospitalAddress" name="hospitalAddress" rows="4" placeholder="Hospital Address" required></textarea>
+        <input type="text" id="hospitalName" name="hospitalName" placeholder="Hospital Name" >
+        <input type="tel" id="hospitalPhone" name="hospitalPhone" placeholder="Hospital Phone" >
+        <textarea id="hospitalAddress" name="hospitalAddress" rows="4" placeholder="Hospital Address"></textarea>
     </div>
 
     <form id="prescriptionForm">
@@ -37,7 +37,7 @@
 
             <input type="text" id="patientName" name="patientName" placeholder="Patient Name" required>
 
-            <input type="number" id="patientAge" name="patientAge" placeholder="Age" required>
+            <input type="number" id="patientAge" name="patientAge" placeholder="Age" min="1" required>
 
             <select id="patientGender" name="patientGender" required>
                 <option value="male">Male</option>
@@ -55,9 +55,9 @@
 
             <div class="subsection">
                 <h4>Health metric</h4>
-                <input type="number" id="weight" name="weight" placeholder="Weight (Kg)" required>
+                <input type="number" id="weight" name="weight" placeholder="Weight (Kg)" min="1" required>
 
-                <input type="number" id="height" name="height" placeholder="Height (feet)" required>
+                <input type="number" id="height" name="height" placeholder="Height (feet)" min="1" required>
 
                 <input type="text" id="bloodPressure" name="bloodPressure" placeholder="Blood Pressure (e.g., 120/80 mmHg)" required>
             </div>

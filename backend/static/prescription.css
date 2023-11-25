@@ -196,16 +196,19 @@ textarea {
 .hospital-info-section {
     display: flex;
     gap: 20px;
-    margin-bottom: 20px;
     border: 1px solid #ccc;
     padding: 15px;
-    border-radius: 8px;
 }
 
 /* Adjust spacing for hospital info fields */
-#hospitalName, #hospitalPhone, #hospitalAddress {
+#hospitalName, #hospitalPhone {
     width: 100%; /* Take full width */
-    margin-bottom: 10px;
+    height: 10px !important; /* Allow the height to adjust based on content */
+}
+
+/* Explicitly set the height for the textarea to auto */
+#hospitalAddress {
+    height: auto!important;
 }
 
 /* Hospital Information Title */
